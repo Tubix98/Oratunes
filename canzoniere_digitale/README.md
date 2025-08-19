@@ -1,4 +1,4 @@
-# App Canzoniere Digitale
+# Oratunes
 
 Applicazione per la gestione del canzoniere parrocchiale, sviluppata per sostituire il file Word esistente con una soluzione moderna, veloce e multi-piattaforma (iPad/Android).
 
