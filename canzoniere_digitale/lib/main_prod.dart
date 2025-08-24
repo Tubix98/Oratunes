@@ -120,11 +120,27 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }*/
-
+/*
 import 'package:flutter/material.dart';
 import 'app.dart';
 
 void main() {
   runApp(const MyApp(env: "PROD"));
 }
+*/
+/*
+import 'package:flutter/material.dart';
+import 'app.dart';
 
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  const flavor = 'prod';
+  runApp(MyApp(flavor: flavor));
+}
+*/
+import 'package:flutter/material.dart';
+import 'app.dart';
+
+void main() {
+  runApp(const CanzoniereApp());
+}
