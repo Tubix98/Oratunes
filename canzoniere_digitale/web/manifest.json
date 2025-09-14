@@ -1,6 +1,6 @@
 {
-    "name": "canzoniere_digitale",
-    "short_name": "canzoniere_digitale",
+    "name": "canzoniere",
+    "short_name": "canzoniere",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
