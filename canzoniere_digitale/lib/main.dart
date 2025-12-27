@@ -12,7 +12,13 @@
 import 'package:flutter/material.dart';
 import 'features/song/presentation/song_list_page.dart';
 
-void main() => runApp(const MyApp());
+import 'features/song/editor/parser/parser_test.dart';
+
+//void main() => runApp(const MyApp());
+void main() {
+  runParserMiniTest(); // <-- TEMPORANEO
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

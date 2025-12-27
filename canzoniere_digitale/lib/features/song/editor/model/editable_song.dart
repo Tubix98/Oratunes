@@ -4,6 +4,7 @@ class EditableSong {
   final String title;
   final String section;
   final List<String> tags;
+  final String? key;
   final List<EditableLine> lines;
 
   EditableSong({
@@ -11,5 +12,6 @@ class EditableSong {
     required this.section,
     required this.tags,
     required this.lines,
+    this.key,
   });
 }
