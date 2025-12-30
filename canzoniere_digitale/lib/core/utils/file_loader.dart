@@ -7,25 +7,21 @@
 // - Caricamento file esterni (download da internet).
 // - Funzioni helper per parsing rapido (es. caricaEParsaCanto(path)).
 
-import 'package:flutter/services.dart' show rootBundle;
 import 'dart:convert';
+import 'package:flutter/services.dart';
 
 Future<List<String>> loadChordProFiles() async {
-  final manifestContent = await rootBundle.loadString('AssetManifest.json');
-  final Map<String, dynamic> manifestMap = await Future.value(
-    Map<String, dynamic>.from(json.decode(manifestContent)),
-  );
+  final indexJson =
+      await rootBundle.loadString('assets/songs/index.json');
 
-  final songPaths = manifestMap.keys
-      .where(
-        (key) => key.startsWith('assets/songs/') && key.endsWith('.chordpro'),
-      )
-      .toList();
+  final List<dynamic> files = json.decode(indexJson);
 
   List<String> contents = [];
-  for (final path in songPaths) {
-    final content = await rootBundle.loadString(path);
+  for (final file in files) {
+    final content =
+        await rootBundle.loadString('assets/songs/$file');
     contents.add(content);
   }
+
   return contents;
 }

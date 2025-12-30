@@ -69,5 +69,6 @@ Song parseChordPro(String content) {
     key: key,
     tags: tags,
     lines: lines,
+    rawContent: content,
   );
 }

@@ -15,6 +15,7 @@ class Song {
   final ChordModel? key;
   final List<String> tags;
   final List<SongLine> lines;
+  final String rawContent;
 
   Song({
     required this.title,
@@ -23,6 +24,7 @@ class Song {
     this.key,
     required this.tags,
     required this.lines,
+    required this.rawContent,
   });
 }
 
