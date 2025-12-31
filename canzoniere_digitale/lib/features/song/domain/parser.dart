@@ -15,6 +15,55 @@
 
 import 'package:canzoniere/features/song/domain/chord_model.dart';
 import 'package:canzoniere/features/song/domain/song_model.dart';
+import '../../../core/utils/chord_transposer.dart';
+
+SongLine parseLineWithChords(
+  String rawLine, {
+    bool isChorus = false,
+    bool isComment = false,
+  }) {
+  final chordRegex = RegExp(r'\[([^\]]+)\]');
+  final matches = chordRegex.allMatches(rawLine);
+
+  final buffer = StringBuffer();
+  final chords = <ChordPosition>[];
+
+  int lastIndex = 0;
+  int textIndex = 0;
+
+  for (final match in matches) {
+    // testo prima dell'accordo
+    final before = rawLine.substring(lastIndex, match.start);
+    buffer.write(before);
+    textIndex += before.length;
+
+    // accordo
+    final chordText = match.group(1)!;
+    final chordModel = parseChord(chordText);
+
+    if (chordModel != null) {
+      chords.add(
+        ChordPosition(
+          chord: chordModel,
+          position: textIndex,
+        ),
+      );
+    }
+
+    lastIndex = match.end;
+  }
+
+  // testo dopo l’ultimo accordo
+  final after = rawLine.substring(lastIndex);
+  buffer.write(after);
+
+  return SongLine(
+    content: buffer.toString(),
+    chords: chords,
+    isChorus: isChorus,
+    isComment: isComment,
+  );
+}
 
 Song parseMarkdownSong(String content) {
   String title = '';
@@ -88,7 +137,12 @@ Song parseMarkdownSong(String content) {
     // → riga vuota logica
     // ----------------------------
     if (line == '***') {
-      lines.add(SongLine(content: ''));
+      lines.add(
+        SongLine(
+          content: '',
+          chords: const [],
+          ),
+      );
       continue;
     } else
     // ----------------------------
@@ -102,8 +156,8 @@ Song parseMarkdownSong(String content) {
     // ----------------------------
     if (line.startsWith('**') && line.endsWith('**')) {
       lines.add(
-        SongLine(
-          content: line.substring(2, line.length - 2).trim(),
+        parseLineWithChords(
+          line.substring(2, line.length - 2).trim(),
           isChorus: true,
         ),
       );
@@ -116,8 +170,8 @@ Song parseMarkdownSong(String content) {
         line.endsWith('*') &&
         !line.startsWith('**')) {
       lines.add(
-        SongLine(
-          content: line.substring(1, line.length - 1).trim(),
+        parseLineWithChords(
+          line.substring(1, line.length - 1).trim(),
           isComment: true,
         ),
       );
@@ -127,8 +181,10 @@ Song parseMarkdownSong(String content) {
     // Testo normale (con o senza accordi)
     // ----------------------------
     lines.add(
-      SongLine(
-        content: rawLine.trimRight(),
+      parseLineWithChords(
+        rawLine.trimRight(),
+        isChorus: false,
+        isComment: false,
       ),
     );
   }

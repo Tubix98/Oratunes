@@ -29,7 +29,8 @@ Leone vinci[DO#-]tore della tribù di [LA]Giuda
 [MI]Vieni nella tua po[LA]tenza  
 questo cuore [DO#-]sciogli con ogni sua pa[LA]ura [SI]
 
-*Ponte (x2)*
+*Ponte (x2)* 
+[MI][SI][DO#-][LA]
 
 Per [MI]sempre io cante[SI]rò la [DO#-]tua immensa fedel[LA]tà  
 Il tuo spirito in [SI]me in e[DO#-]terno ti lode[LA]rà

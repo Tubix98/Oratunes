@@ -28,11 +28,13 @@ class Song {
 
 class SongLine {
   final String content;
+  final List<ChordPosition> chords;
   final bool isChorus;
   final bool isComment;
 
   SongLine({
     required this.content,
+    this.chords = const [],
     this.isChorus = false,
     this.isComment = false,
   });

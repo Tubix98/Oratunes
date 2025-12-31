@@ -21,10 +21,11 @@ class LyricsRendererWrapper extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: song.lines.map((line) {
-        if (line.content.isEmpty) {
-          return const Text('', style: TextStyle(height: 2.0));
+        // Riga davvero vuota (nessun testo, nessun accordo)
+        if (line.content.isEmpty && line.chords.isEmpty) {
+          return const SizedBox(height: 16);
         }
-        // Altrimenti, usa il nostro widget per renderizzare la riga con gli accordi
+        // Tutti gli altri casi (testo, accordi o entrambi)
         return CustomLyricsLine(
           line: line,
           transposeIncrement: transpose,
