@@ -9,7 +9,7 @@
 
 import '../domain/song_model.dart';
 import 'song_datasource.dart';
-import '../domain/parse_chordpro.dart';
+import '../domain/parser.dart';
 
 class SongRepository {
   final SongDataSource dataSource;
@@ -17,6 +17,6 @@ class SongRepository {
 
   Future<List<Song>> getAllSongs() async {
     final files = await dataSource.loadFiles();
-    return files.map(parseChordPro).toList();
+    return files.map(parseMarkdownSong).toList();
   }
 }

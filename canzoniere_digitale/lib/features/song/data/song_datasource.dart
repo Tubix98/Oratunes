@@ -21,7 +21,7 @@ class SongDataSource {
     final chordProPaths = assetPaths.where(
       (path) => 
         path.startsWith('assets/songs/') && 
-        path.endsWith('.chordpro'), 
+        path.endsWith('.md'), 
     );
 
     
