@@ -19,11 +19,7 @@ class SongViewPage extends StatelessWidget {
         builder: (context, viewModel, _) {
           return Scaffold(
             appBar: AppBar(title: Text(viewModel.song.title)),
-            body: InteractiveViewer(
-              panEnabled: true,
-              boundaryMargin: EdgeInsets.all(20),
-              minScale: 0.5,
-              child: SingleChildScrollView(
+            body: SingleChildScrollView(
                 padding: const EdgeInsets.all(16.0),
                 child: SizedBox(
                   width: double.infinity,
@@ -33,7 +29,6 @@ class SongViewPage extends StatelessWidget {
                     showChords: viewModel.showChords,
                   ),
                 ),
-              ),
             ),
             floatingActionButton: SpeedDial(
               animatedIcon: AnimatedIcons.menu_close,
