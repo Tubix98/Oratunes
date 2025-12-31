@@ -7,25 +7,31 @@
 // - Cache dei file letti per non ricaricarli ogni volta.
 // - Conversione immediata in Song tramite il parser (per risparmiare passaggi).
 
-import 'package:flutter/services.dart' show rootBundle;
-import 'dart:convert';
+import 'package:flutter/services.dart' show AssetManifest, rootBundle;
 
 class SongDataSource {
   Future<List<String>> loadFiles() async {
-    final manifestContent = await rootBundle.loadString('AssetManifest.json');
-    final Map<String, dynamic> manifestMap = json.decode(manifestContent);
+    // Carica il manifest degli asset
+    final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
 
-    final paths = manifestMap.keys
-        .where(
-          (key) => key.startsWith('assets/songs/') && key.endsWith('.chordpro'),
-        )
-        .toList();
+    // Ottieni la lista di tutti gli asset
+    final assetPaths = manifest.listAssets();
 
-    List<String> contents = [];
-    for (var path in paths) {
+    // Filtra i file con estensione .chordpro nella cartella assets/songs/
+    final chordProPaths = assetPaths.where(
+      (path) => 
+        path.startsWith('assets/songs/') && 
+        path.endsWith('.chordpro'), 
+    );
+
+    
+    final contents = <String>[];
+    // Carica il contenuto di ciascun file
+    for (final path in chordProPaths) {
       final content = await rootBundle.loadString(path);
       contents.add(content);
     }
+
     return contents;
   }
 }

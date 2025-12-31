@@ -7,7 +7,7 @@
 // - Trasposizione automatica di tonalità.
 
 import 'package:canzoniere/features/song/domain/chord_model.dart';
-import 'package:canzoniere/features/song/data/song_model.dart';
+import 'package:canzoniere/features/song/domain/song_model.dart';
 import 'package:canzoniere/core/utils/chord_transposer.dart';
 
 Song parseChordPro(String content) {

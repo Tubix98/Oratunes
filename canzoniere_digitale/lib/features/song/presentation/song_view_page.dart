@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
-import '../data/song_model.dart';
+import '../domain/song_model.dart';
 import '../../../core/widgets/lyrics_renderer_wrapper.dart';
 import 'song_view_model.dart';
 

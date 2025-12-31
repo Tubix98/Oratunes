@@ -9,9 +9,9 @@
 // - Pulsante "aggiungi a preferiti" direttamente dalla lista.
 
 import 'package:flutter/material.dart';
-import '../data/song_model.dart';
+import '../data/song_datasource.dart';
+import '../domain/song_model.dart';
 import '../domain/parse_chordpro.dart';
-import '../../../core/utils/file_loader.dart';
 import 'song_view_page.dart';
 import '../../../core/widgets/search_bar.dart';
 
@@ -34,7 +34,7 @@ class _SongListPageState extends State<SongListPage> {
   }
 
   Future<void> _loadSongs() async {
-    final fileContents = await loadChordProFiles();
+    final fileContents = await SongDataSource().loadFiles();
     final parsedSongs = fileContents.map(parseChordPro).toList();
 
     parsedSongs.sort(

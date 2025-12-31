@@ -7,7 +7,7 @@
 // - Metodi per cercare un canto specifico per titolo o ID.
 // - Eventuale gestione di preferiti/playlist (anche se potrebbe andare in domain).
 
-import 'song_model.dart';
+import '../domain/song_model.dart';
 import 'song_datasource.dart';
 import '../domain/parse_chordpro.dart';
 

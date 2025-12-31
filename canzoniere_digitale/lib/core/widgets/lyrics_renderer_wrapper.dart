@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../features/song/data/song_model.dart';
+import '../../features/song/domain/song_model.dart';
 import 'custom_lyrics_line.dart';
 
 /// Widget "manager" che riceve un intero oggetto Song e si occupa di

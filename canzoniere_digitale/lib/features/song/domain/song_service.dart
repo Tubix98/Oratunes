@@ -7,7 +7,7 @@
 // - Filtri per sezione, per tag, per accordo.
 // - Metodi per creare indici tematici dinamici.
 
-import '../data/song_model.dart';
+import 'song_model.dart';
 
 class SongService {
   List<Song> search(List<Song> songs, String query) {

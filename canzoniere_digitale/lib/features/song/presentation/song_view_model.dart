@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../data/song_model.dart';
+import '../domain/song_model.dart';
 
 /// ViewModel che gestisce lo stato della pagina di visualizzazione del canto
 class SongViewModel extends ChangeNotifier {

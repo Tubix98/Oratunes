@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../features/song/data/song_model.dart';
+import '../../features/song/domain/song_model.dart';
 import '../utils/chord_transposer.dart';
 
 /// Widget "lavoratore" che renderizza una singola riga di testo e accordi.
