@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../domain/song_model.dart';
 import '../../../core/widgets/lyrics_renderer_wrapper.dart';
 import '../../../core/layout/lyrics_layout.dart';
+import '../../../core/layout/font_size_level.dart';
 import 'song_view_model.dart';
 
 /// Pagina principale che mostra il canto con accordi, testo e controlli
@@ -81,7 +82,15 @@ class _SongViewContent extends StatelessWidget {
             onTap: viewModel.toggleChords,
           ),
           SpeedDialChild(
-            child: const Icon(Icons.text_fields),
+            child: Center(
+              child: Text(
+                'A',
+                style: TextStyle(
+                  fontSize: fontIndicatorSize(viewModel.fontSizeLevel),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
             label: 'Cambia dimensione testo',
             onTap: viewModel.cycleFontSize,
           ),
