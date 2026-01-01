@@ -56,9 +56,14 @@ class _SongViewContent extends StatelessWidget {
         ),
       ),
       floatingActionButton: SpeedDial(
+
         animatedIcon: AnimatedIcons.menu_close,
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
+        closeManually: true,
+        renderOverlay: true,
+        overlayOpacity: 0.5,
+
         children: [
           SpeedDialChild(
             child: const Icon(Icons.add),

@@ -22,15 +22,18 @@ class CustomLyricsLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final baseFontSize = 16.0 * fontScale;
+    final chordFontSize = 14.0 * fontScale;
+
     final textStyle = TextStyle(
-      fontSize: 18*fontScale,
+      fontSize: baseFontSize,
       fontWeight: line.isChorus ? FontWeight.bold : FontWeight.normal,
       color: Colors.black87,
       height: 1.5,
     );
 
     final chordStyle = TextStyle(
-      fontSize: 16*fontScale,
+      fontSize: chordFontSize,
       fontWeight: FontWeight.bold,
       color: Colors.indigo,
       height: 1.2
@@ -41,13 +44,13 @@ class CustomLyricsLine extends StatelessWidget {
     // ----------------------------
     if (line.isComment) {
       return Padding(
-        padding: EdgeInsets.symmetric(vertical: 8*fontScale),
+        padding: EdgeInsets.symmetric(vertical: fontScale * 0.4),
         child: Text(
           line.content,
           style: TextStyle(
             fontStyle: FontStyle.italic,
             color: Colors.black54,
-            fontSize: 16*fontScale,
+            fontSize: baseFontSize,
           ),
         ),
       );
@@ -63,7 +66,7 @@ class CustomLyricsLine extends StatelessWidget {
       }
       
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: EdgeInsets.symmetric(vertical: fontScale*0.35),
         child: Wrap(
           spacing: 12,
           children: line.chords.map((chordPos) {
@@ -80,7 +83,7 @@ class CustomLyricsLine extends StatelessWidget {
             return Text(
               chordText,
               style: TextStyle(
-                fontSize: 16*fontScale,
+                fontSize: chordFontSize,
                 fontWeight: FontWeight.bold,
                 color: Colors.indigo,
               ),
@@ -96,7 +99,7 @@ class CustomLyricsLine extends StatelessWidget {
     // ----------------------------
     if (!showChords || line.chords.isEmpty) {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6),
+        padding: EdgeInsets.symmetric(vertical: fontScale * 0.4),
         child: Text(line.content, style: textStyle),
       );
     }
@@ -105,37 +108,45 @@ class CustomLyricsLine extends StatelessWidget {
     // TESTO + ACCORDI (posizionati)
     // ----------------------------
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: EdgeInsets.symmetric(vertical: baseFontSize * 0.4),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           // Testo
           Text(line.content, style: textStyle),
 
-          // Accordi
-          ...line.chords.map((chordPos) {
-            final transposed = transposeModel(
-              chordPos.chord,
-              transposeIncrement,
-            );
+          // Accordi sopra al testo
+          if (showChords)
+            ...line.chords.map((chordPos) {
+              final transposed = transposeModel(
+                chordPos.chord,
+                transposeIncrement,
+              );
 
-            final chordText = formatChord(
-              transposed,
-              style: NotationStyle.latin,
-            );
+              final chordText = formatChord(
+                transposed,
+                style: NotationStyle.latin,
+              );
 
-            return Positioned(
-              left: LyricsLayout.measureTextWidth(
-                text: line.content,
-                charIndex: chordPos.position,
-                style: textStyle,
-              ),
-              top: LyricsLayout.chordTopOffset(textStyle),
-              child: Text(chordText, style: chordStyle),
-            );
-          }),
+              final chordWidth = LyricsLayout.measureTextWidth(
+                text: chordText,
+                charIndex: chordText.length,
+                style: chordStyle,
+              );
+
+              return Positioned(
+                left: LyricsLayout.measureTextWidth(
+                  text: line.content,
+                  charIndex: chordPos.position,
+                  style: textStyle,
+                ) - chordWidth / 2,
+                top: LyricsLayout.chordTopOffset(textStyle),
+                child: Text(chordText, style: chordStyle),
+              );
+            }),
         ],
       ),
     );
+
   }
 }

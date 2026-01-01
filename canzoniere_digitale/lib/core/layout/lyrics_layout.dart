@@ -48,9 +48,9 @@ class LyricsLayout {
   }
 
   /// Offset verticale consigliato per posizionare un accordo sopra al testo
-  static double chordTopOffset(TextStyle textStyle) {
-    final fontSize = textStyle.fontSize ?? 16;
-    return -fontSize * 0.9;
+  static chordTopOffset(TextStyle textStyle) {
+    final size = textStyle.fontSize ?? 16;
+    return -size * 0.75;
   }
 
   static double fontScaleForLevel({
