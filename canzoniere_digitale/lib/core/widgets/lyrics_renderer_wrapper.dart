@@ -8,12 +8,14 @@ class LyricsRendererWrapper extends StatelessWidget {
   final Song song;
   final int transpose;
   final bool showChords;
+  final double fontScale;
 
   const LyricsRendererWrapper({
     super.key,
     required this.song,
     this.transpose = 0,
     this.showChords = true,
+    this.fontScale = 1.0,
   });
 
   @override
@@ -30,6 +32,7 @@ class LyricsRendererWrapper extends StatelessWidget {
           line: line,
           transposeIncrement: transpose,
           showChords: showChords,
+          fontScale: fontScale,
         );
       }).toList(),
     );

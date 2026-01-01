@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../features/song/domain/song_model.dart';
 import '../utils/chord_transposer.dart';
-import '../utils/lyrics_layout.dart';
+import '../layout/lyrics_layout.dart';
 
 /// Widget che renderizza una singola riga di testo
 /// con eventuali accordi posizionati sopra al testo
@@ -10,27 +10,30 @@ class CustomLyricsLine extends StatelessWidget {
   final SongLine line;
   final int transposeIncrement;
   final bool showChords;
+  final double fontScale;
 
   const CustomLyricsLine({
     super.key,
     required this.line,
     required this.transposeIncrement,
     required this.showChords,
+    this.fontScale = 1.0,
   });
 
   @override
   Widget build(BuildContext context) {
     final textStyle = TextStyle(
-      fontSize: 18,
+      fontSize: 18*fontScale,
       fontWeight: line.isChorus ? FontWeight.bold : FontWeight.normal,
       color: Colors.black87,
       height: 1.5,
     );
 
-    const chordStyle = TextStyle(
-      fontSize: 16,
+    final chordStyle = TextStyle(
+      fontSize: 16*fontScale,
       fontWeight: FontWeight.bold,
       color: Colors.indigo,
+      height: 1.2
     );
 
     // ----------------------------
@@ -38,13 +41,13 @@ class CustomLyricsLine extends StatelessWidget {
     // ----------------------------
     if (line.isComment) {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+        padding: EdgeInsets.symmetric(vertical: 8*fontScale),
         child: Text(
           line.content,
-          style: const TextStyle(
+          style: TextStyle(
             fontStyle: FontStyle.italic,
             color: Colors.black54,
-            fontSize: 16,
+            fontSize: 16*fontScale,
           ),
         ),
       );
@@ -76,8 +79,8 @@ class CustomLyricsLine extends StatelessWidget {
 
             return Text(
               chordText,
-              style: const TextStyle(
-                fontSize: 16,
+              style: TextStyle(
+                fontSize: 16*fontScale,
                 fontWeight: FontWeight.bold,
                 color: Colors.indigo,
               ),
