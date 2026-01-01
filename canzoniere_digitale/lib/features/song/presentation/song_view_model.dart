@@ -1,3 +1,4 @@
+import 'package:canzoniere/core/persistence/font_size_storage.dart';
 import 'package:flutter/material.dart';
 import '../domain/song_model.dart';
 import '../../../core/layout/font_size_level.dart';
@@ -13,7 +14,9 @@ class SongViewModel extends ChangeNotifier {
   FontSizeLevel _fontSizeLevel = FontSizeLevel.medium;
 
   // Costruttore
-  SongViewModel({required this.song});
+  SongViewModel({required this.song}){
+    _loadFontSize();
+  }
 
   // Getters
   int get transposeValue => _transposeValue;
@@ -52,7 +55,16 @@ class SongViewModel extends ChangeNotifier {
       case FontSizeLevel.large:
         _fontSizeLevel = FontSizeLevel.small;
     }
+
+    FontSizeStorage.save(_fontSizeLevel);
     notifyListeners();
   }
+
+  Future<void> _loadFontSize() async {
+    final saved = await FontSizeStorage.load();
+    _fontSizeLevel = saved;
+    notifyListeners();
+  }
+
 
 }
