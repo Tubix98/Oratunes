@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 
 import '../data/song_local_storage.dart';
 import '../data/song_repository.dart';
+import '../data/song_index_loader.dart';
 import '../domain/song_model.dart';
 
 import 'song_view_page.dart';
@@ -38,6 +39,14 @@ class _SongListPageState extends State<SongListPage> {
       localStorage: SongLocalStorage(),
     );
     _loadSongs();
+    _testIndex();
+  }
+
+  Future<void> _testIndex() async {
+    final index = await SongIndexLoader.load();
+    for (final song in index.songs) {
+      debugPrint('Song: ${song.file} (${song.hash})');
+    }
   }
 
   Future<void> _loadSongs() async {
