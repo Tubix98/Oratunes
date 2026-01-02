@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 
 import '../data/song_local_storage.dart';
 import '../data/song_repository.dart';
-import '../data/song_index_loader.dart';
+import '../data/song_index_remote_source.dart';
 import '../domain/song_model.dart';
 
 import 'song_view_page.dart';
@@ -39,13 +39,19 @@ class _SongListPageState extends State<SongListPage> {
       localStorage: SongLocalStorage(),
     );
     _loadSongs();
-    _testIndex();
+    _testRemoteIndex();
   }
 
-  Future<void> _testIndex() async {
-    final index = await SongIndexLoader.load();
+  Future<void> _testRemoteIndex() async {
+    final source = SongIndexRemoteSource(
+      baseUrl:
+          'https://raw.githubusercontent.com/Tubix98/Oratunes/main/songs',
+    );
+
+    final index = await source.loadIndex();
+
     for (final song in index.songs) {
-      debugPrint('Song: ${song.file} (${song.hash})');
+      debugPrint('REMOTE: ${song.file} (${song.hash})');
     }
   }
 
