@@ -9,9 +9,11 @@
 // - Pulsante "aggiungi a preferiti" direttamente dalla lista.
 
 import 'package:flutter/material.dart';
-import '../data/song_datasource.dart';
+
+import '../data/song_local_storage.dart';
+import '../data/song_repository.dart';
 import '../domain/song_model.dart';
-import '../domain/parser.dart';
+
 import 'song_view_page.dart';
 import '../../../core/widgets/search_bar.dart';
 
@@ -23,6 +25,8 @@ class SongListPage extends StatefulWidget {
 }
 
 class _SongListPageState extends State<SongListPage> {
+  late final SongRepository repository;
+
   List<Song> songs = [];
   bool isLoading = true;
   String _searchQuery = '';
@@ -30,22 +34,21 @@ class _SongListPageState extends State<SongListPage> {
   @override
   void initState() {
     super.initState();
+    repository = SongRepository(
+      localStorage: SongLocalStorage(),
+    );
     _loadSongs();
   }
 
   Future<void> _loadSongs() async {
-    final fileContents = await SongDataSource().loadFiles();
-    final parsedSongs = fileContents.map(parseMarkdownSong).toList();
-
-    parsedSongs.sort(
-      (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
-    );
+    final loadedSongs = await repository.loadSongs();
 
     setState(() {
-      songs = parsedSongs;
+      songs = loadedSongs;
       isLoading = false;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {

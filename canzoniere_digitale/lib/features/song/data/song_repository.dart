@@ -1,22 +1,30 @@
-// Repository che fa da "ponte" tra data source e dominio.
-// Si occupa di caricare i file ChordPro dal data source
-// e di convertirli in modelli Song tramite il parser.
-//
-// Cosa si può aggiungere:
-// - Filtri (per sezione, per tag, per autore).
-// - Metodi per cercare un canto specifico per titolo o ID.
-// - Eventuale gestione di preferiti/playlist (anche se potrebbe andare in domain).
-
 import '../domain/song_model.dart';
-import 'song_datasource.dart';
 import '../domain/parser.dart';
+import 'song_local_storage.dart';
 
 class SongRepository {
-  final SongDataSource dataSource;
-  SongRepository({required this.dataSource});
+  final SongLocalStorage localStorage;
 
-  Future<List<Song>> getAllSongs() async {
-    final files = await dataSource.loadFiles();
-    return files.map(parseMarkdownSong).toList();
+  SongRepository({required this.localStorage});
+
+  /// Carica TUTTI i canti disponibili in locale
+  Future<List<Song>> loadSongs() async {
+    final files = await localStorage.listSongFiles();
+
+    final List<Song> songs = [];
+
+    for (final filename in files) {
+      final content = await localStorage.readSong(filename);
+      if (content == null) continue;
+
+      final song = parseMarkdownSong(content);
+      songs.add(song);
+    }
+
+    songs.sort(
+      (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
+    );
+
+    return songs;
   }
 }
