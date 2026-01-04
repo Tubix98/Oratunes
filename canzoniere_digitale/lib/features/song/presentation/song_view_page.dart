@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
 
+import '../data/song_local_storage.dart';
+import '../data/song_repository.dart';
 import '../domain/song_model.dart';
 import '../../../core/widgets/lyrics_renderer_wrapper.dart';
 import '../../../core/layout/lyrics_layout.dart';
@@ -10,15 +12,38 @@ import 'song_view_model.dart';
 
 /// Pagina principale che mostra il canto con accordi, testo e controlli
 class SongViewPage extends StatelessWidget {
-  final Song song;
+  final String songId;
 
-  const SongViewPage({super.key, required this.song});
+  const SongViewPage({super.key, required this.songId});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => SongViewModel(song: song),
-      child: const _SongViewContent(),
+    final repository = SongRepository(
+      localStorage: SongLocalStorage(),
+    );
+
+    return FutureBuilder<Song?>(
+      future: repository.loadSong(songId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        if (!snapshot.hasData || snapshot.data == null) {
+          return const Scaffold(
+            body: Center(child: Text('Canto non trovato')),
+          );
+        }
+
+        final song = snapshot.data!;
+
+        return ChangeNotifierProvider(
+          create: (_) => SongViewModel(song: song),
+          child: const _SongViewContent(),
+        );
+      },
     );
   }
 }

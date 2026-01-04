@@ -21,19 +21,19 @@ class SongIndex {
 }
 
 class SongIndexEntry {
-  final String file;
+  final String id;
   final String hash;
   final String title;
 
   SongIndexEntry({
-    required this.file,
+    required this.id,
     required this.hash,
     required this.title,
   });
 
   factory SongIndexEntry.fromJson(Map<String, dynamic> json) {
     return SongIndexEntry(
-      file: json['file'],
+      id: json['id'],
       hash: json['hash'],
       title: json['title'],
     );
