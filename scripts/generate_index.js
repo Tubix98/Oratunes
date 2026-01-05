@@ -3,16 +3,32 @@ const crypto = require('crypto');
 const path = require('path');
 
 const songsDir = path.join(__dirname, '../songs');
+
+// prende solo i file .md
 const files = fs.readdirSync(songsDir).filter(f => f.endsWith('.md'));
 
 const songs = files.map(file => {
-  const content = fs.readFileSync(path.join(songsDir, file), 'utf8');
-  const hash = crypto.createHash('md5').update(content).digest('hex');
+  const fullPath = path.join(songsDir, file);
+  const content = fs.readFileSync(fullPath, 'utf8');
 
-  const titleMatch = content.match(/title:\s*(.+)/);
-  const title = titleMatch ? titleMatch[1].trim() : file;
+  // hash del contenuto (per aggiornamenti futuri)
+  const hash = crypto
+    .createHash('md5')
+    .update(content)
+    .digest('hex');
 
-  return { file, hash, title };
+  // id = nome file senza estensione
+  const id = path.basename(file, '.md');
+
+  // prova a leggere il titolo dal markdown (es: "title: Gloria")
+  const titleMatch = content.match(/title:\s*(.+)/i);
+  const title = titleMatch ? titleMatch[1].trim() : id;
+
+  return {
+    id,
+    title,
+    hash
+  };
 });
 
 const index = {
@@ -23,7 +39,8 @@ const index = {
 
 fs.writeFileSync(
   path.join(songsDir, 'index.json'),
-  JSON.stringify(index, null, 2)
+  JSON.stringify(index, null, 2),
+  'utf8'
 );
 
-console.log('index.json generato');
+console.log('index.json generato correttamente');
