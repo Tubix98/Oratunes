@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class SongIndex {
   final int version;
   final DateTime generatedAt;
@@ -18,6 +20,18 @@ class SongIndex {
           .toList(),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'version': version,
+      'generatedAt': generatedAt.toIso8601String(),
+      'songs': songs.map((e) => e.toJson()).toList(),
+    };
+  }
+
+  String toJsonString() {
+    return jsonEncode(toJson());
+  }
 }
 
 class SongIndexEntry {
@@ -37,5 +51,13 @@ class SongIndexEntry {
       hash: json['hash'],
       title: json['title'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'hash': hash,
+    };
   }
 }

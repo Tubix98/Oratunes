@@ -1,17 +1,21 @@
 import 'dart:convert';
-import 'package:flutter/services.dart';
+
+import 'song_local_storage.dart';
 import 'song_index_model.dart';
 
 class SongIndexRepository {
-  const SongIndexRepository();
+  final SongLocalStorage localStorage;
 
-  Future<SongIndex> loadIndex() async {
-    final jsonString = await rootBundle.loadString(
-      'assets/mock/index.json',
-    );
+  SongIndexRepository({required this.localStorage});
+
+  Future<SongIndex?> loadIndex() async {
+    final jsonString = await localStorage.readIndex();
+
+    // Caso: primo avvio, sync non ancora fatta
+    if (jsonString == null) return null;
 
     final Map<String, dynamic> jsonMap =
-        json.decode(jsonString) as Map<String, dynamic>;
+        jsonDecode(jsonString) as Map<String, dynamic>;
 
     return SongIndex.fromJson(jsonMap);
   }

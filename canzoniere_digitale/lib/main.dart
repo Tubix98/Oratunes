@@ -12,7 +12,28 @@
 import 'package:flutter/material.dart';
 import 'features/song/presentation/song_list_page.dart';
 
-void main() => runApp(const MyApp());
+import 'features/song/application/sync_service.dart';
+import 'features/song/data/song_local_storage.dart';
+import 'features/song/data/song_index_remote_source.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final local = SongLocalStorage();
+  final remote = SongIndexRemoteSource(
+    baseUrl: 'https://raw.githubusercontent.com/Tubix98/Oratunes/dev-chord-native/songs/index.json',
+  );
+
+  final syncService = SyncService(
+    local: local,
+    remote: remote,
+  );
+
+  await syncService.sync();
+
+  runApp(const MyApp());
+}
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

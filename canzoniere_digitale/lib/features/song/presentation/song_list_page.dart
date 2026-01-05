@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 
 import '../data/song_index_model.dart';
 import '../data/song_index_repository.dart';
+import '../data/song_local_storage.dart';
 
 import 'song_view_page.dart';
 import '../../../core/widgets/search_bar.dart';
@@ -24,7 +25,9 @@ class SongListPage extends StatefulWidget {
 }
 
 class _SongListPageState extends State<SongListPage> {
-  final SongIndexRepository indexRepository = const SongIndexRepository();
+  final SongIndexRepository indexRepository = SongIndexRepository(
+    localStorage: SongLocalStorage(),
+  );
 
   SongIndex? index;
   bool isLoading = true;

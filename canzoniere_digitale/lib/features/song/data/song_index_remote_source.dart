@@ -21,4 +21,16 @@ class SongIndexRemoteSource {
     final Map<String, dynamic> jsonMap = json.decode(response.body);
     return SongIndex.fromJson(jsonMap);
   }
+
+  Future<String> loadSong(String songId) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/$songId.md'),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load song $songId');
+    }
+
+    return response.body;
+  }
 }
