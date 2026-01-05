@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '../data/song_local_storage.dart';
 import '../data/song_index_remote_source.dart';
 
@@ -11,6 +13,15 @@ class SyncService {
   });
 
   Future<void> sync() async {
+    try {
+      await _performSync();
+    } catch (e) {
+      debugPrint('Sync error: $e');
+    }
+
+  }
+
+  Future<void> _performSync() async {
     // 1. scarica index remoto
     final index = await remote.loadIndex();
 

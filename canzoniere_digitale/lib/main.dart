@@ -21,7 +21,7 @@ void main() async {
 
   final local = SongLocalStorage();
   final remote = SongIndexRemoteSource(
-    baseUrl: 'https://raw.githubusercontent.com/Tubix98/Oratunes/dev-chord-native/songs/index.json',
+    baseUrl: 'https://raw.githubusercontent.com/Tubix98/Oratunes/dev-chord-native/songs',
   );
 
   final syncService = SyncService(
@@ -29,8 +29,12 @@ void main() async {
     remote: remote,
   );
 
-  await syncService.sync();
-
+  try{
+    await syncService.sync();
+  } catch (e, st) {
+    debugPrint('SYNC FAILED: $e');
+    debugPrintStack(stackTrace: st);
+  }
   runApp(const MyApp());
 }
 
