@@ -12,6 +12,7 @@
 import 'package:flutter/material.dart';
 import 'features/song/presentation/song_list_page.dart';
 
+<<<<<<< HEAD
 //import 'features/song/editor/parser/parser_test.dart';
 
 //void main() => runApp(const MyApp());
@@ -19,6 +20,34 @@ void main() {
   //runParserMiniTest(); // <-- TEMPORANEO
   runApp(const MyApp());
 }
+=======
+import 'features/song/application/sync_service.dart';
+import 'features/song/data/song_local_storage.dart';
+import 'features/song/data/song_index_remote_source.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final local = SongLocalStorage();
+  final remote = SongIndexRemoteSource(
+    baseUrl: 'https://raw.githubusercontent.com/Tubix98/Oratunes/dev-chord-native/songs',
+  );
+
+  final syncService = SyncService(
+    local: local,
+    remote: remote,
+  );
+
+  try{
+    await syncService.sync();
+  } catch (e, st) {
+    debugPrint('SYNC FAILED: $e');
+    debugPrintStack(stackTrace: st);
+  }
+  runApp(const MyApp());
+}
+
+>>>>>>> e19607676500f21d80a6835bae87bcd3e7446df9
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

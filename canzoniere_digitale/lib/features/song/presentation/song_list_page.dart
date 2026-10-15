@@ -9,9 +9,11 @@
 // - Pulsante "aggiungi a preferiti" direttamente dalla lista.
 
 import 'package:flutter/material.dart';
-import '../data/song_model.dart';
-import '../domain/parse_chordpro.dart';
-import '../../../core/utils/file_loader.dart';
+
+import '../data/song_index_model.dart';
+import '../data/song_index_repository.dart';
+import '../data/song_local_storage.dart';
+
 import 'song_view_page.dart';
 import '../../../core/widgets/search_bar.dart';
 
@@ -23,42 +25,44 @@ class SongListPage extends StatefulWidget {
 }
 
 class _SongListPageState extends State<SongListPage> {
-  List<Song> songs = [];
+  final SongIndexRepository indexRepository = SongIndexRepository(
+    localStorage: SongLocalStorage(),
+  );
+
+  SongIndex? index;
   bool isLoading = true;
   String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
-    _loadSongs();
+    _loadIndex();
   }
 
-  Future<void> _loadSongs() async {
-    final fileContents = await loadChordProFiles();
-    final parsedSongs = fileContents.map(parseChordPro).toList();
-
-    parsedSongs.sort(
-      (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
-    );
+  Future<void> _loadIndex() async {
+    final loadedIndex = await indexRepository.loadIndex();
 
     setState(() {
-      songs = parsedSongs;
+      index = loadedIndex;
       isLoading = false;
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     if (isLoading) return const Center(child: CircularProgressIndicator());
-    if (songs.isEmpty) return const Center(child: Text('Nessun canto trovato'));
-
+    if (index == null || index!.songs.isEmpty) {
+      return const Center(child: Text('Nessun canto trovato'));
+    }
     // Filtra i canti in base alla query di ricerca
-    final filteredSongs = songs.where((song) {
-      return song.title.toLowerCase().contains(_searchQuery) ||
-          song.section.toLowerCase().contains(_searchQuery) ||
-          song.tags.any((tag) {
+    final filteredSongs = index!.songs.where((entry) {
+      return entry.title.toLowerCase().contains(_searchQuery) 
+      /*||
+          entry.section.toLowerCase().contains(_searchQuery) ||
+          entry.tags.any((tag) {
             return tag.toLowerCase().contains(_searchQuery);
-          });
+          })*/ ;
     }).toList();
 
     return Column(
@@ -78,16 +82,17 @@ class _SongListPageState extends State<SongListPage> {
                 )
               : ListView.builder(
                   itemCount: filteredSongs.length,
-                  itemBuilder: (context, index) {
-                    final song = filteredSongs[index];
+                  itemBuilder: (context, i) {
+                    final song = filteredSongs[i];
                     return ListTile(
                       title: Text(song.title),
                       //subtitle: Text(song.section),
                       onTap: () {
+                        //debugPrint('OPEN SONG ID: ${song.id}');
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => SongViewPage(song: song),
+                            builder: (context) => SongViewPage(songId: song.id),
                           ),
                         );
                       },
